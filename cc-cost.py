@@ -218,6 +218,35 @@ def report_text(label: str, s: Stats, show_diag: bool = False) -> str:
     return "\n".join(parts)
 
 
+def report_markdown(label: str, s: Stats, show_diag: bool = False) -> str:
+    """Markdown-formatted report — shareable, paste-able into PRs / issues / docs."""
+    chr_pct = cache_hit_rate(s) * 100
+    parts = [f"### {label}"]
+    parts.append(f"| field | value |")
+    parts.append(f"| --- | --- |")
+    parts.append(f"| model | `{s.model}` |")
+    parts.append(f"| turns | {s.turns:,} |")
+    parts.append(f"| input tokens | {s.input_tokens:,} |")
+    parts.append(f"| output tokens | {s.output_tokens:,} |")
+    parts.append(f"| cache write | {s.cache_create_tokens:,} |")
+    parts.append(f"| cache read | {s.cache_read_tokens:,} |")
+    parts.append(f"| **cache hit rate** | **{chr_pct:.1f}%** |")
+    parts.append(f"| **total cost USD** | **${s.cost:,.4f}** |")
+    if s.tool_calls:
+        parts.append("\n**Tool call distribution:**")
+        parts.append("| tool | calls |")
+        parts.append("| --- | ---: |")
+        for tool, n in sorted(s.tool_calls.items(), key=lambda x: -x[1]):
+            parts.append(f"| `{tool}` | {n:,} |")
+    if show_diag:
+        recs = diagnose(s)
+        if recs:
+            parts.append("\n**Recommendations:**")
+            for i, r in enumerate(recs, 1):
+                parts.append(f"{i}. {r}")
+    return "\n".join(parts) + "\n"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(prog="cc-cost", description="Claude Code transcript cost analyzer")
     ap.add_argument("path", nargs="?", help="transcript.jsonl, or omitted to scan ~/.claude/projects")
@@ -225,6 +254,7 @@ def main() -> int:
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--diagnose", action="store_true", help="print specific cost-optimization recommendations")
     ap.add_argument("--top", type=int, default=0, help="show only top N most expensive sessions")
+    ap.add_argument("--md", action="store_true", help="markdown report (paste into PRs/issues)")
     args = ap.parse_args()
 
     files: list[Path] = []
@@ -286,10 +316,13 @@ def main() -> int:
         print(json.dumps(out, indent=2))
         return 0
 
+    fmt = report_markdown if args.md else report_text
+    if args.md:
+        print("# Claude Code Cost Report\n")
     for path, s in per_file:
-        print(report_text(Path(path).name, s, show_diag=args.diagnose))
+        print(fmt(Path(path).name, s, show_diag=args.diagnose))
     if len(per_file) > 1:
-        print(report_text(f"TOTAL across {len(per_file)} session(s)", total, show_diag=args.diagnose))
+        print(fmt(f"TOTAL across {len(per_file)} session(s)", total, show_diag=args.diagnose))
     return 0
 
 
