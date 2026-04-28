@@ -10,6 +10,12 @@ costs ~10× less than the same work at 0%.
 ## Install
 
 ```bash
+pip install cc-cost
+```
+
+Or no-install:
+
+```bash
 curl -O https://raw.githubusercontent.com/lob-labs/cc-cost/main/cc-cost.py
 chmod +x cc-cost.py
 ```
@@ -20,22 +26,22 @@ No dependencies beyond Python 3.9+.
 
 ```bash
 # Scan all sessions under ~/.claude/projects
-./cc-cost.py
+cc-cost
 
 # A specific transcript
-./cc-cost.py ~/.claude/projects/-home-foo/<id>.jsonl
+cc-cost ~/.claude/projects/-home-foo/<id>.jsonl
 
 # Single project
-./cc-cost.py --project -home-foo
+cc-cost --project -home-foo
 
 # JSON output (for automation)
-./cc-cost.py --json
+cc-cost --json
 
 # Get specific cost-optimization recommendations
-./cc-cost.py --diagnose <transcript.jsonl>
+cc-cost --diagnose <transcript.jsonl>
 
 # Show only the top 5 most expensive sessions
-./cc-cost.py --top 5
+cc-cost --top 5
 ```
 
 ## Sample output
