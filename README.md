@@ -67,10 +67,11 @@ When debugging "why was this session $40," the answer is almost always one of:
 
 This shows you which of those is biting you, fast.
 
-## Tip jar (USDC on Base or Solana)
+## Tip jar
 
 If this saved you money, consider tipping:
 
+- **Venmo**: [@lobsterlabs](https://venmo.com/u/lobsterlabs)
 - **USDC on Base / any EVM**: `0xE0c311585d2000afF6b8020e30912Ac37ffe406a`
 - **USDC on Solana / SOL**: `4a6YaVijdv79iXvXvXFu67kVBPFA6n8YSwYXt3ECj6ND`
 
