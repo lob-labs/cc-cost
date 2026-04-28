@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cc-cost"
+version = "1.1.0"
+description = "Claude Code transcript cost analyzer"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Lobster Labs", email = "thelobsterlabs@gmail.com"}]
+keywords = ["claude", "claude-code", "anthropic", "cost", "tokens", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/lob-labs/cc-cost"
+Repository = "https://github.com/lob-labs/cc-cost"
+
+[project.scripts]
+cc-cost = "cc_cost:main"
