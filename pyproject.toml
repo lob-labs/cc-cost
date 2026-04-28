@@ -25,3 +25,8 @@ Repository = "https://github.com/lob-labs/cc-cost"
 
 [project.scripts]
 cc-cost = "cc_cost:main"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
